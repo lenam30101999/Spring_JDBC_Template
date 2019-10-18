@@ -1,6 +1,7 @@
 package com.k003.nam.object;
 
 public class Employee {
+
     private int id_Employee;
     private String firstName_Employee;
     private String lastName_Employee;
