@@ -4,11 +4,11 @@ import com.k003.nam.dataSource.EmployeeJDBCTemplate;
 import com.k003.nam.object.Employee;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 
 import java.util.Scanner;
 
-@Service
+@Controller
 public class UserController {
 
     private Scanner scanner = new Scanner(System.in);

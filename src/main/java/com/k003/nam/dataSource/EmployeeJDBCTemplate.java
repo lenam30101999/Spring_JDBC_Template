@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -17,15 +18,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-@Repository
+@Service
+@Transactional
 public class EmployeeJDBCTemplate implements EmployeeDAO {
 
-    @Autowired
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplateObject;
     //SimpleJdbcInsert jdbcInsert;
 
-    @Override
+    @Autowired
     public void setDataSource(DataSource dataSource){
         this.dataSource = dataSource;
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
@@ -56,6 +57,7 @@ public class EmployeeJDBCTemplate implements EmployeeDAO {
     }
 
     //Tao them employee
+    @Override
     public void create(int id, String firstName, String lastName, String address) {
         String SQL_Query = "INSERT INTO EMPLOYEE VALUES(?,?,?,?) ";
         jdbcTemplateObject.update(SQL_Query,id,firstName,lastName,address);
@@ -64,6 +66,7 @@ public class EmployeeJDBCTemplate implements EmployeeDAO {
     }
 
     //Update employee
+    @Override
     public void update(int id, String address){
         String SQL_Query = "UPDATE EMPLOYEE SET ADDRESS = ? WHERE ID = ?";
         jdbcTemplateObject.update(SQL_Query, address, id);
@@ -71,6 +74,7 @@ public class EmployeeJDBCTemplate implements EmployeeDAO {
     }
 
     //Delete employee
+    @Override
     public void delete(Integer id){
         String SQL_Query = "DELETE FROM EMPLOYEE WHERE ID = ?";
         jdbcTemplateObject.update(SQL_Query,id);
@@ -78,11 +82,12 @@ public class EmployeeJDBCTemplate implements EmployeeDAO {
     }
 
     //Lay ra tat ca
-    public List<Employee> getAll(){
+    private List<Employee> getAll(){
         return jdbcTemplateObject.query("SELECT * FROM EMPLOYEE", new EmployeeMapper());
     }
 
     //Search 1 employee
+    @Override
     public Employee getEmployee(Integer id){
         String SQL_Query = "SELECT * FROM EMPLOYEE WHERE ID = ?";
         Employee employee = jdbcTemplateObject.queryForObject(
@@ -91,6 +96,7 @@ public class EmployeeJDBCTemplate implements EmployeeDAO {
         return employee;
     }
 
+    @Override
     public void print(){
 
         List<Employee> employees = this.getAll();
