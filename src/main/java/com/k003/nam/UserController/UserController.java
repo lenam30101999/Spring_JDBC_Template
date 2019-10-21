@@ -2,10 +2,14 @@ package com.k003.nam.UserController;
 
 import com.k003.nam.dataSource.EmployeeJDBCTemplate;
 import com.k003.nam.object.Employee;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 @Controller
@@ -24,16 +28,44 @@ public class UserController {
     private String firstName;
     private String lastName;
     private String address;
+    private Employee employee;
+    private List<Employee> lists;
 
     private void init(){
         id = "";
         firstName = "";
         lastName = "";
         address = "";
+        employee = new Employee();
+        lists = new ArrayList<>();
         EmployeeJDBCTemplate jdbcTemplate = new EmployeeJDBCTemplate();
     }
 
+    private Employee creation(){
+        init();
+        System.out.println("Enter ID : ");
+        scanner.nextLine();
+        id = scanner.nextLine();
+
+        System.out.println("First name: ");
+        firstName = scanner.nextLine();
+
+        System.out.println("Last name: ");
+        lastName = scanner.nextLine();
+
+        System.out.println("Address:");
+        address = scanner.nextLine();
+
+        employee.setId_Employee(Integer.parseInt(id));
+        employee.setFirstName_Employee(firstName);
+        employee.setLastName_Employee(lastName);
+        employee.setAddress_Employee(address);
+
+        return employee;
+    }
+
     public void controller(){
+        int totalInput = 0;
         init();
 
         do {
@@ -50,31 +82,19 @@ public class UserController {
             switch (choice){
                 case 1:{
                     System.out.println("----Creation----");
-
-                    System.out.println("Enter ID : ");
-                    scanner.nextLine();
-                    id = scanner.nextLine();
-
-                    System.out.println("Enter name: ");
-                    firstName = scanner.nextLine();
-
-                    System.out.println("Last name: ");
-                    lastName = scanner.nextLine();
-
-                    System.out.println("Address:");
-                    address = scanner.nextLine();
-                    employeeJDBCTemplate.create(Integer.parseInt(id),firstName,lastName,address);
+                    employeeJDBCTemplate.create(creation());
                     break;
                 }
 
                 case 2:{
                     System.out.println("----Update----");
-                    System.out.println("ID: ");
+                    System.out.println("Enter ID : ");
                     scanner.nextLine();
                     id = scanner.nextLine();
-                    System.out.println("Address: ");
+                    System.out.println("Address:");
                     address = scanner.nextLine();
-                    employeeJDBCTemplate.update(Integer.parseInt(id),address);
+
+                    employeeJDBCTemplate.update(Integer.parseInt(id), address);
                     break;
                 }
 
@@ -91,8 +111,9 @@ public class UserController {
                     System.out.println("ID: ");
                     scanner.nextLine();
                     id = scanner.nextLine();
-                    System.out.println("----Employee----");
-                    Employee employee = employeeJDBCTemplate.getEmployee(Integer.parseInt(id));
+                    employee = employeeJDBCTemplate.getEmployee(Integer.parseInt(id));
+
+                    System.out.println("\n----Employee----");
                     System.out.printf("%-20d%-30s%-30s%-30s\n",
                             employee.getId_Employee(),
                             employee.getFirstName_Employee(),

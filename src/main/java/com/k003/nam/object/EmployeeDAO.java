@@ -7,7 +7,7 @@ public interface EmployeeDAO {
 
     public void setDataSource(DataSource dataSource);
 
-    public void create(int id, String firstName, String lastName, String address);
+    public void create(Employee employee);
 
     public void update(int id, String address);
 
@@ -18,4 +18,5 @@ public interface EmployeeDAO {
     public Employee getEmployee(Integer id);
 
     public List<Employee> listEmployee();
+
 }
